@@ -17,6 +17,7 @@ DEFAULT_ALLOWED_ORIGINS = (
     "http://127.0.0.1:4028",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://forge-ide-0-khaki.vercel.app",
 )
 
 
