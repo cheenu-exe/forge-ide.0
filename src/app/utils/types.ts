@@ -1,12 +1,6 @@
 import type { LanguageKey } from './languageConfigs';
 
-export type ExecutionStatus =
-  | 'idle'
-  | 'running'
-  | 'success'
-  | 'compile_error'
-  | 'runtime_error'
-  | 'tle';
+export type ExecutionStatus = 'idle' | 'running' | 'success' | 'compile_error' | 'runtime_error' | 'tle';
 
 export type BackendStatus = 'checking' | 'ready' | 'offline';
 
