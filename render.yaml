@@ -10,6 +10,6 @@ services:
       - key: EXECUTION_ENGINE
         value: local
       - key: EXECUTION_TIMEOUT_SECONDS
-        value: "30"
+        value: '30'
       - key: EXECUTION_MAX_TIMEOUT_SECONDS
-        value: "60"
+        value: '60'

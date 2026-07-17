@@ -1,4 +1,5 @@
-export type LanguageKey = 'cpp' | 'c' | 'python' | 'java' | 'javascript' | 'go' | 'rust' | 'php' | 'csharp';
+export type LanguageKey =
+  'cpp' | 'c' | 'python' | 'java' | 'javascript' | 'go' | 'rust' | 'php' | 'csharp';
 
 export interface LanguageConfig {
   key: LanguageKey;
