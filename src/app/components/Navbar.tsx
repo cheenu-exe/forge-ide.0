@@ -3,6 +3,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   ChevronDown,
+  Download,
+  Github,
   Keyboard,
   Minus,
   Moon,
@@ -35,7 +37,8 @@ interface NavbarProps {
   onRun: () => void | Promise<void>;
   onClear: () => void;
   onFormat: () => void;
-  onSave: () => void;
+  onDownload: () => void;
+  onSaveToGitHub: () => void;
   onToggleTheme: () => void;
   theme: 'dark' | 'light';
   isRunning: boolean;
@@ -54,7 +57,8 @@ export default function Navbar({
   onRun,
   onClear,
   onFormat,
-  onSave,
+  onDownload,
+  onSaveToGitHub,
   onToggleTheme,
   theme,
   isRunning,
@@ -66,8 +70,10 @@ export default function Navbar({
   runnerLabel,
 }: NavbarProps) {
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const [saveDropdownOpen, setSaveDropdownOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const langDropdownRef = useRef<HTMLDivElement>(null);
+  const saveDropdownRef = useRef<HTMLDivElement>(null);
   const shortcutsRef = useRef<HTMLDivElement>(null);
 
   const currentLang = LANGUAGE_CONFIGS[language];
@@ -76,6 +82,10 @@ export default function Navbar({
     const handleClickOutside = (event: MouseEvent) => {
       if (langDropdownRef.current && !langDropdownRef.current.contains(event.target as Node)) {
         setLangDropdownOpen(false);
+      }
+
+      if (saveDropdownRef.current && !saveDropdownRef.current.contains(event.target as Node)) {
+        setSaveDropdownOpen(false);
       }
 
       if (shortcutsRef.current && !shortcutsRef.current.contains(event.target as Node)) {
@@ -242,15 +252,60 @@ export default function Navbar({
           <span className="hidden md:inline">Format</span>
         </button>
 
-        <button
-          onClick={onSave}
-          className="btn-ghost flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium"
-          title="Save file (Ctrl/Cmd+S)"
-          aria-label="Save code"
-        >
-          <Save size={15} />
-          <span className="hidden md:inline">Save</span>
-        </button>
+        <div className="relative" ref={saveDropdownRef}>
+          <button
+            onClick={() => setSaveDropdownOpen((current) => !current)}
+            className="btn-ghost flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium"
+            title="Save file (Ctrl/Cmd+S)"
+            aria-label="Save code"
+            aria-haspopup="true"
+            aria-expanded={saveDropdownOpen}
+          >
+            <Save size={15} />
+            <span className="hidden md:inline">Save</span>
+            <ChevronDown
+              size={12}
+              className={`text-muted-foreground transition-transform duration-150 ${
+                saveDropdownOpen ? 'rotate-180' : ''
+              }`}
+            />
+          </button>
+
+          {saveDropdownOpen && (
+            <div
+              className="fade-in absolute right-0 top-full z-50 mt-1 min-w-[180px] overflow-hidden rounded-lg border border-border shadow-xl"
+              style={{ background: 'var(--card)' }}
+            >
+              <button
+                onClick={() => {
+                  onDownload();
+                  setSaveDropdownOpen(false);
+                }}
+                className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-sm text-muted-foreground transition-colors hover:text-foreground"
+                style={{ background: 'transparent' }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--secondary)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+              >
+                <Download size={15} />
+                <span>Download</span>
+              </button>
+              <div className="mx-2 h-px bg-border" />
+              <button
+                onClick={() => {
+                  onSaveToGitHub();
+                  setSaveDropdownOpen(false);
+                }}
+                className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-sm text-muted-foreground transition-colors hover:text-foreground"
+                style={{ background: 'transparent' }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--secondary)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+              >
+                <Github size={15} />
+                <span>Save to GitHub</span>
+              </button>
+            </div>
+          )}
+        </div>
 
         <button
           onClick={onClear}

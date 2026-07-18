@@ -5,6 +5,7 @@ import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { toast } from 'sonner';
 
 import EditorPanel from './EditorPanel';
+import GitHubSaveModal from './GitHubSaveModal';
 import InputPanel from './InputPanel';
 import Navbar from './Navbar';
 import OutputPanel from './OutputPanel';
@@ -45,6 +46,7 @@ export default function IDEWorkspace() {
   const [availableLanguages, setAvailableLanguages] = useState<LanguageKey[]>(LANGUAGE_ORDER);
   const [backendStatus, setBackendStatus] = useState<BackendStatus>('checking');
   const [runtimeStatus, setRuntimeStatus] = useState<CompilerRuntimeStatus | null>(null);
+  const [githubSaveOpen, setGitHubSaveOpen] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
   const hasLoadedStorageRef = useRef(false);
 
@@ -341,7 +343,7 @@ export default function IDEWorkspace() {
     }
   }, [language, code]);
 
-  const handleSaveCode = useCallback(() => {
+  const handleDownload = useCallback(() => {
     const blob = new Blob([code], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -349,8 +351,12 @@ export default function IDEWorkspace() {
     link.download = `solution.${LANGUAGE_CONFIGS[language].extension}`;
     link.click();
     URL.revokeObjectURL(url);
-    toast.success(`Saved solution.${LANGUAGE_CONFIGS[language].extension}`, { duration: 1400 });
+    toast.success(`Downloaded solution.${LANGUAGE_CONFIGS[language].extension}`, { duration: 1400 });
   }, [code, language]);
+
+  const handleSaveToGitHub = useCallback(() => {
+    setGitHubSaveOpen(true);
+  }, []);
 
   const handleToggleTheme = useCallback(() => {
     setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'));
@@ -366,7 +372,7 @@ export default function IDEWorkspace() {
         void handleRunCode();
       } else if (ctrlOrCmd && event.key.toLowerCase() === 's') {
         event.preventDefault();
-        handleSaveCode();
+        handleDownload();
       } else if (ctrlOrCmd && event.shiftKey && event.key.toLowerCase() === 'f') {
         event.preventDefault();
         handleFormatCode();
@@ -377,7 +383,7 @@ export default function IDEWorkspace() {
       void handleRunCode();
     };
     const handleSaveEvent = () => {
-      handleSaveCode();
+      handleDownload();
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -389,7 +395,7 @@ export default function IDEWorkspace() {
       window.removeEventListener('forge:run-code', handleRunEvent);
       window.removeEventListener('forge:save-code', handleSaveEvent);
     };
-  }, [handleFormatCode, handleRunCode, handleSaveCode]);
+  }, [handleFormatCode, handleRunCode, handleDownload]);
 
   return (
     <div
@@ -403,7 +409,8 @@ export default function IDEWorkspace() {
         onRun={handleRunCode}
         onClear={handleClear}
         onFormat={handleFormatCode}
-        onSave={handleSaveCode}
+        onDownload={handleDownload}
+        onSaveToGitHub={handleSaveToGitHub}
         onToggleTheme={handleToggleTheme}
         theme={theme}
         isRunning={isRunning}
@@ -448,6 +455,13 @@ export default function IDEWorkspace() {
           </Panel>
         </PanelGroup>
       </div>
+
+      <GitHubSaveModal
+        open={githubSaveOpen}
+        onClose={() => setGitHubSaveOpen(false)}
+        code={code}
+        fileName={`solution.${LANGUAGE_CONFIGS[language].extension}`}
+      />
     </div>
   );
 }
