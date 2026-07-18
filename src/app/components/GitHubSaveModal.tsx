@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Github, Loader2, X } from 'lucide-react';
+import { GitBranch, Loader2, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface GitHubSaveModalProps {
@@ -11,12 +11,20 @@ interface GitHubSaveModalProps {
   fileName: string;
 }
 
-export default function GitHubSaveModal({ open, onClose, code, fileName: defaultFileName }: GitHubSaveModalProps) {
+export default function GitHubSaveModal({
+  open,
+  onClose,
+  code,
+  fileName: defaultFileName,
+}: GitHubSaveModalProps) {
   const [repoUrl, setRepoUrl] = useState('');
   const [fileName, setFileName] = useState(defaultFileName);
   const [saving, setSaving] = useState(false);
   const [confirmOverwrite, setConfirmOverwrite] = useState(false);
-  const [pendingOverwrite, setPendingOverwrite] = useState<{ repoUrl: string; fileName: string } | null>(null);
+  const [pendingOverwrite, setPendingOverwrite] = useState<{
+    repoUrl: string;
+    fileName: string;
+  } | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const repoInputRef = useRef<HTMLInputElement>(null);
 
@@ -65,7 +73,10 @@ export default function GitHubSaveModal({ open, onClose, code, fileName: default
 
       if (!response.ok) {
         if (data.conflict) {
-          setPendingOverwrite({ repoUrl: repoUrl.trim(), fileName: fileName.trim() });
+          setPendingOverwrite({
+            repoUrl: repoUrl.trim(),
+            fileName: fileName.trim(),
+          });
           setConfirmOverwrite(true);
           return;
         }
@@ -77,7 +88,9 @@ export default function GitHubSaveModal({ open, onClose, code, fileName: default
       setPendingOverwrite(null);
       onClose();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to save to GitHub');
+      toast.error(
+        error instanceof Error ? error.message : 'Failed to save to GitHub',
+      );
     } finally {
       setSaving(false);
     }
@@ -100,10 +113,16 @@ export default function GitHubSaveModal({ open, onClose, code, fileName: default
       >
         <div className="mb-5 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: 'var(--secondary)' }}>
-              <Github size={16} />
+            <div
+              className="flex h-8 w-8 items-center justify-center rounded-lg"
+              style={{ background: 'var(--secondary)' }}
+            >
+              <GitBranch size={16} />
             </div>
-            <h2 className="text-base font-semibold" style={{ color: 'var(--foreground)' }}>
+            <h2
+              className="text-base font-semibold"
+              style={{ color: 'var(--foreground)' }}
+            >
               Save to GitHub
             </h2>
           </div>
@@ -152,11 +171,18 @@ export default function GitHubSaveModal({ open, onClose, code, fileName: default
               className="rounded-lg border border-warning/30 px-4 py-3 text-sm"
               style={{ background: 'var(--warning-bg, rgba(234,179,8,0.08))' }}
             >
-              <p className="mb-2 font-medium" style={{ color: 'var(--warning, #eab308)' }}>
+              <p
+                className="mb-2 font-medium"
+                style={{ color: 'var(--warning, #eab308)' }}
+              >
                 File already exists
               </p>
               <p className="text-muted-foreground">
-                A file named <span className="font-mono text-foreground">{pendingOverwrite?.fileName}</span> already exists in this repository. Replace it?
+                A file named{' '}
+                <span className="font-mono text-foreground">
+                  {pendingOverwrite?.fileName}
+                </span>{' '}
+                already exists in this repository. Replace it?
               </p>
               <div className="mt-3 flex gap-2">
                 <button
@@ -165,7 +191,9 @@ export default function GitHubSaveModal({ open, onClose, code, fileName: default
                   className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-all"
                   style={{ background: 'var(--warning, #eab308)', color: '#000' }}
                 >
-                  {saving ? <Loader2 size={14} className="animate-spin" /> : null}
+                  {saving ? (
+                    <Loader2 size={14} className="animate-spin" />
+                  ) : null}
                   Replace
                 </button>
                 <button
@@ -193,7 +221,11 @@ export default function GitHubSaveModal({ open, onClose, code, fileName: default
               disabled={saving || !repoUrl.trim() || !fileName.trim()}
               className="btn-primary flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium disabled:opacity-50"
             >
-              {saving ? <Loader2 size={14} className="animate-spin" /> : <Github size={14} />}
+              {saving ? (
+                <Loader2 size={14} className="animate-spin" />
+              ) : (
+                <GitBranch size={14} />
+              )}
               {saving ? 'Saving...' : 'Save'}
             </button>
           </div>

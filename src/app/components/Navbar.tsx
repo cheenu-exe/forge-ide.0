@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   ChevronDown,
   Download,
-  Github,
+  GitBranch,
   Keyboard,
   Minus,
   Moon,
@@ -300,7 +300,7 @@ export default function Navbar({
                 onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--secondary)')}
                 onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
               >
-                <Github size={15} />
+                <GitBranch size={15} />
                 <span>Save to GitHub</span>
               </button>
             </div>

@@ -351,7 +351,10 @@ export default function IDEWorkspace() {
     link.download = `solution.${LANGUAGE_CONFIGS[language].extension}`;
     link.click();
     URL.revokeObjectURL(url);
-    toast.success(`Downloaded solution.${LANGUAGE_CONFIGS[language].extension}`, { duration: 1400 });
+    toast.success(
+      `Downloaded solution.${LANGUAGE_CONFIGS[language].extension}`,
+      { duration: 1400 },
+    );
   }, [code, language]);
 
   const handleSaveToGitHub = useCallback(() => {
