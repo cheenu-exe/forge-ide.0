@@ -256,7 +256,7 @@ export default function IDEWorkspace() {
           language,
           code,
           stdin: input,
-          timeLimit: 5,
+          timeLimit: 15,
         }),
         signal: abortControllerRef.current.signal,
       });
