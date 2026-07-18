@@ -16,7 +16,7 @@ export async function POST(request: Request) {
         error:
           'GITHUB_TOKEN environment variable is not set. Add it in Vercel dashboard → Settings → Environment Variables.',
       },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -36,16 +36,13 @@ export async function POST(request: Request) {
   if (!repoUrl || !fileName || code === undefined) {
     return NextResponse.json(
       { error: 'repoUrl, fileName, and code are required' },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   const parsed = parseRepoUrl(repoUrl);
   if (!parsed) {
-    return NextResponse.json(
-      { error: 'Invalid GitHub repository URL' },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: 'Invalid GitHub repository URL' }, { status: 400 });
   }
 
   const { owner, repo } = parsed;
@@ -71,7 +68,7 @@ export async function POST(request: Request) {
           sha: existing.sha,
           message: `File "${fileName}" already exists in ${owner}/${repo}. Send overwrite=true to replace.`,
         },
-        { status: 409 },
+        { status: 409 }
       );
     }
     const updateRes = await fetch(apiUrl, {
@@ -85,12 +82,10 @@ export async function POST(request: Request) {
     });
 
     if (!updateRes.ok) {
-      const err = await updateRes
-        .json()
-        .catch(() => ({ message: updateRes.statusText }));
+      const err = await updateRes.json().catch(() => ({ message: updateRes.statusText }));
       return NextResponse.json(
         { error: err.message || 'Failed to update file' },
-        { status: updateRes.status },
+        { status: updateRes.status }
       );
     }
 
@@ -103,12 +98,10 @@ export async function POST(request: Request) {
   }
 
   if (existingRes.status !== 404) {
-    const err = await existingRes
-      .json()
-      .catch(() => ({ message: existingRes.statusText }));
+    const err = await existingRes.json().catch(() => ({ message: existingRes.statusText }));
     return NextResponse.json(
       { error: err.message || 'Failed to check file' },
-      { status: existingRes.status },
+      { status: existingRes.status }
     );
   }
 
@@ -122,12 +115,10 @@ export async function POST(request: Request) {
   });
 
   if (!createRes.ok) {
-    const err = await createRes
-      .json()
-      .catch(() => ({ message: createRes.statusText }));
+    const err = await createRes.json().catch(() => ({ message: createRes.statusText }));
     return NextResponse.json(
       { error: err.message || 'Failed to create file' },
-      { status: createRes.status },
+      { status: createRes.status }
     );
   }
 

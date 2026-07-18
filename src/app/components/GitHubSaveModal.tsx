@@ -88,9 +88,7 @@ export default function GitHubSaveModal({
       setPendingOverwrite(null);
       onClose();
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : 'Failed to save to GitHub',
-      );
+      toast.error(error instanceof Error ? error.message : 'Failed to save to GitHub');
     } finally {
       setSaving(false);
     }
@@ -119,10 +117,7 @@ export default function GitHubSaveModal({
             >
               <GitBranch size={16} />
             </div>
-            <h2
-              className="text-base font-semibold"
-              style={{ color: 'var(--foreground)' }}
-            >
+            <h2 className="text-base font-semibold" style={{ color: 'var(--foreground)' }}>
               Save to GitHub
             </h2>
           </div>
@@ -171,17 +166,12 @@ export default function GitHubSaveModal({
               className="rounded-lg border border-warning/30 px-4 py-3 text-sm"
               style={{ background: 'var(--warning-bg, rgba(234,179,8,0.08))' }}
             >
-              <p
-                className="mb-2 font-medium"
-                style={{ color: 'var(--warning, #eab308)' }}
-              >
+              <p className="mb-2 font-medium" style={{ color: 'var(--warning, #eab308)' }}>
                 File already exists
               </p>
               <p className="text-muted-foreground">
                 A file named{' '}
-                <span className="font-mono text-foreground">
-                  {pendingOverwrite?.fileName}
-                </span>{' '}
+                <span className="font-mono text-foreground">{pendingOverwrite?.fileName}</span>{' '}
                 already exists in this repository. Replace it?
               </p>
               <div className="mt-3 flex gap-2">
@@ -191,9 +181,7 @@ export default function GitHubSaveModal({
                   className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-all"
                   style={{ background: 'var(--warning, #eab308)', color: '#000' }}
                 >
-                  {saving ? (
-                    <Loader2 size={14} className="animate-spin" />
-                  ) : null}
+                  {saving ? <Loader2 size={14} className="animate-spin" /> : null}
                   Replace
                 </button>
                 <button
@@ -221,11 +209,7 @@ export default function GitHubSaveModal({
               disabled={saving || !repoUrl.trim() || !fileName.trim()}
               className="btn-primary flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium disabled:opacity-50"
             >
-              {saving ? (
-                <Loader2 size={14} className="animate-spin" />
-              ) : (
-                <GitBranch size={14} />
-              )}
+              {saving ? <Loader2 size={14} className="animate-spin" /> : <GitBranch size={14} />}
               {saving ? 'Saving...' : 'Save'}
             </button>
           </div>
